@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { tap } from 'rxjs';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,17 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'frontend';
+  themes = signal<string[]>(['light', 'dark']);
+  formControl = new FormControl<string>('light');
+
+  constructor(private themeService: ThemeService) {
+    this.formControl.valueChanges
+      .pipe(
+        tap((v) => {
+          console.log(v);
+          this.themeService.setTheme(v as string);
+        })
+      )
+      .subscribe();
+  }
 }

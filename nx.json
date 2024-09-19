@@ -54,6 +54,11 @@
       "standalone": false,
       "bundler": "esbuild",
       "skipTests": true
+    },
+    "@schematics/angular:service": {
+      "skipTests": true,
+      "flat": false,
+      "spec": false
     }
   },
   "plugins": [
