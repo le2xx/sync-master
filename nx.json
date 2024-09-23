@@ -59,6 +59,15 @@
       "skipTests": true,
       "flat": false,
       "spec": false
+    },
+    "@nx/nest:service": {
+      "unitTestRunner": "none"
+    },
+    "@nx/nest:controller": {
+      "unitTestRunner": "none"
+    },
+    "@nx/nest:guard": {
+      "unitTestRunner": "none"
     }
   },
   "plugins": [
