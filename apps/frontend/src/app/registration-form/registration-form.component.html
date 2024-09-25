@@ -1,0 +1,51 @@
+<div [formGroup]="formGroup" class="card flex flex-column md:flex-row gap-4">
+  <p-inputGroup>
+    <p-inputGroupAddon><i class="pi pi-at"></i></p-inputGroupAddon>
+    <input type="text" placeholder="Email" pInputText formControlName="email" />
+  </p-inputGroup>
+
+  <p-inputGroup>
+    <p-inputGroupAddon><i class="pi pi-lock"></i></p-inputGroupAddon>
+    <input
+      [type]="isDisplayPass() ? 'text' : 'password'"
+      pInputText
+      placeholder="Пароль"
+      formControlName="password"
+    />
+    <p-inputGroupAddon class="cursor-pointer" (click)="onToggleDisplayPass()">
+      @if (isDisplayPass()) {
+      <i class="pi pi-eye"></i>
+      } @else {
+      <i class="pi pi-eye-slash"></i>
+      }
+    </p-inputGroupAddon>
+  </p-inputGroup>
+
+  <p-inputGroup>
+    <p-inputGroupAddon><i class="pi pi-lock"></i></p-inputGroupAddon>
+    <input
+      [type]="isDisplayPass() ? 'text' : 'password'"
+      pInputText
+      placeholder="Подтвердить пароль"
+      formControlName="confirmPassword"
+    />
+    <p-inputGroupAddon class="cursor-pointer" (click)="onToggleDisplayPass()">
+      @if (isDisplayPass()) {
+      <i class="pi pi-eye"></i>
+      } @else {
+      <i class="pi pi-eye-slash"></i>
+      }
+    </p-inputGroupAddon>
+  </p-inputGroup>
+
+  <p-inputGroup>
+    <button
+      pButton
+      pRipple
+      label="Зарегистрировать"
+      class="p-inputgroup p-button-success"
+      [disabled]="formGroup.invalid"
+      (click)="onRegistry()"
+    ></button>
+  </p-inputGroup>
+</div>

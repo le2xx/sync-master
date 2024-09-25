@@ -7,6 +7,11 @@ import { NxWelcomeComponent } from './nx-welcome.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { RegistrationFormComponent } from './registration-form/registration-form.component';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,8 +21,9 @@ import { provideAnimations } from '@angular/platform-browser/animations';
     NxWelcomeComponent,
     DropdownModule,
     ReactiveFormsModule,
+    RegistrationFormComponent,
   ],
-  providers: [provideAnimations()],
+  providers: [provideAnimations(), provideHttpClient(withInterceptorsFromDi())],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

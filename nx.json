@@ -55,10 +55,15 @@
       "bundler": "esbuild",
       "skipTests": true
     },
+    "@nx/angular:component": {
+      "style": "scss",
+      "changeDetection": "OnPush",
+      "standalone": true,
+      "skipTests": true
+    },
     "@schematics/angular:service": {
       "skipTests": true,
-      "flat": false,
-      "spec": false
+      "flat": false
     },
     "@nx/nest:service": {
       "unitTestRunner": "none"
