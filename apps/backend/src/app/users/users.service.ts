@@ -1,17 +1,17 @@
 import { Delete, Injectable, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { Users } from './users.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>
+    @InjectRepository(Users)
+    private usersRepository: Repository<Users>
   ) {}
 
-  private readonly users: User[] = [
+  private readonly users: Users[] = [
     {
       id: 1,
       email: 'john',
@@ -26,11 +26,11 @@ export class UsersService {
     },
   ];
 
-  async findOne(email: string): Promise<User | undefined> {
+  async findOne(email: string): Promise<Users | undefined> {
     return this.users.find((user) => user.email === email);
   }
 
-  async createUser(user: { email: string; password: string }): Promise<User> {
+  async createUser(user: { email: string; password: string }): Promise<Users> {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(user.password, saltRounds);
     const newUser = {

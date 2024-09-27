@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start-front": "nx serve frontend",
+    "start-front": "nx serve frontend --port 4210",
     "start-back": "nx serve backend"
   },
   "private": true,
