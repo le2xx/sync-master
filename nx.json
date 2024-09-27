@@ -73,6 +73,10 @@
     },
     "@nx/nest:guard": {
       "unitTestRunner": "none"
+    },
+    "@nx/node:library": {
+      "unitTestRunner": "none",
+      "rootDir": "libs"
     }
   },
   "plugins": [
@@ -88,6 +92,12 @@
       "plugin": "@nx/eslint/plugin",
       "options": {
         "targetName": "eslint:lint"
+      }
+    },
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test"
       }
     }
   ]
