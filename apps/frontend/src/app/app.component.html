@@ -1,10 +1,24 @@
-<p-dropdown
-  [options]="themes()"
-  [formControl]="formControl"
-  placeholder="Select a theme"
-/>
+<div class="header">
+  <div class="theme-switcher">
+    @if (formControl.value) {
+    <i class="pi pi-moon"></i>
+    } @else {
+    <i class="pi pi-sun"></i>
+    }
+    <p-inputSwitch [formControl]="formControl" />
+  </div>
 
-<app-nx-welcome></app-nx-welcome> <router-outlet></router-outlet>
+  <span>is login: {{ isLogin() }}</span>
+</div>
+
 <div class="wrap">
-  <app-registration-form />
+  <div class="form">
+    <h3>User registry</h3>
+    <app-registration-form />
+  </div>
+
+  <div class="form">
+    <h3>User auth</h3>
+    <app-auth-form />
+  </div>
 </div>

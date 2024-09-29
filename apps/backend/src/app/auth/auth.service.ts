@@ -1,29 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UserService } from '../user/user.service'; // Импорт сервиса пользователей
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService
+  ) {}
 
-  // Валидация пользователя
-  async validateUser(username: string, pass: string): Promise<any> {
-    // Здесь логика поиска пользователя в базе данных
-    const user = { username: 'test', password: 'hashedPassword' }; // пример пользователя
+  async validateUser(email: string, password: string): Promise<any> {
+    const user = await this.userService.findByEmail(email);
 
-    const isPasswordValid = await bcrypt.compare(pass, user.password);
-    if (user && isPasswordValid) {
+    if (user && (await bcrypt.compare(password, user.password))) {
       const { password, ...result } = user;
       return result;
     }
     return null;
   }
 
-  // Генерация JWT
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+  async createToken(user: any) {
+    const payload = { email: user.email, sub: user.userId };
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async login(email: string, password: string) {
+    const user = await this.validateUser(email, password);
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return this.createToken(user);
   }
 }
