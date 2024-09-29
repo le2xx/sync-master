@@ -27,6 +27,7 @@ export class AppComponent {
     private destroyRef: DestroyRef
   ) {
     this.isLogin = this.authService.isLogin;
+    this.formControl.setValue(this.themeService.isDark());
     this.formControl.valueChanges
       .pipe(
         tap((v) => this.themeService.setTheme(v ? 'dark' : 'light')),

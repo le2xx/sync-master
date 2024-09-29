@@ -1,17 +1,26 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, signal } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ThemeService {
-  constructor(@Inject(DOCUMENT) private document: Document) {}
+  isDark = signal<boolean>(false);
+  themeKey = 'theme';
+
+  constructor(@Inject(DOCUMENT) private document: Document) {
+    this.setTheme(localStorage.getItem(this.themeKey) || 'light');
+  }
 
   setTheme(theme: string): void {
     let themeLink = this.document.getElementById(
       'app-theme'
     ) as HTMLLinkElement;
 
-    themeLink.href = themeLink ? `${theme}.css` : 'light';
+    if (themeLink) {
+      themeLink.href = `${theme}.css`;
+    }
+    localStorage.setItem(this.themeKey, theme);
+    this.isDark.set(theme === 'dark');
   }
 }
