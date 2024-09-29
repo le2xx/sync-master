@@ -6,7 +6,7 @@ export class Users implements UserType {
   @PrimaryGeneratedColumn('uuid')
   userId: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column({ default: null })

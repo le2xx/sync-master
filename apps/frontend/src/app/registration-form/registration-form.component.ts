@@ -15,7 +15,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { UserRegistry, UsersService } from '../services/users.service';
+import { UsersService } from '../services/users.service';
 import { tap } from 'rxjs';
 
 @Component({
@@ -45,7 +45,10 @@ export class RegistrationFormComponent {
       Validators.required,
       Validators.email,
     ]),
-    password: new FormControl<string>(null, [Validators.required]),
+    password: new FormControl<string>(null, [
+      Validators.required,
+      Validators.min(8),
+    ]),
     confirmPassword: new FormControl<string>(null),
   });
 
