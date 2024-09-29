@@ -14,7 +14,7 @@ export class UsersService {
 
   createUser(userRegistry: UserRegistry) {
     return this.httpClient.post<any>(
-      'http://localhost:3000/api/users',
+      'http://localhost:3000/api/users/register',
       userRegistry
     );
   }

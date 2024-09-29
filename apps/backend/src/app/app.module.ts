@@ -10,9 +10,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Request, Response, NextFunction } from 'express';
+import { UserModule } from './user/user.module';
 
 @Injectable()
 export class CorsMiddleware implements NestMiddleware {
@@ -43,7 +43,7 @@ export class CorsMiddleware implements NestMiddleware {
       autoLoadEntities: true,
     }),
     AuthModule,
-    UsersModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
