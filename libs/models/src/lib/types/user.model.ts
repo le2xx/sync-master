@@ -5,6 +5,7 @@ export type UserType = {
   email: string;
   firstName: string;
   lastName: string;
+  registerAt: Date;
   password: string;
   isActive: boolean;
   isDeleted: boolean;
@@ -20,7 +21,7 @@ export class CreateUserDto implements Pick<UserType, 'email' | 'password'> {
   password: string;
 }
 
-export type UserResponseDto = Pick<
+export type UserResponseDto = Omit<
   UserType,
-  'userId' | 'email' | 'firstName' | 'lastName'
+  'password' | 'isActive' | 'isDeleted'
 >;

@@ -1,28 +1,18 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Users } from './user.entity';
 import * as bcrypt from 'bcryptjs';
-import { CreateUserDto } from '@libs/models/src/lib/types';
+import { CreateUserDto, UserType } from '@libs/models/src/lib/types';
+import { Users } from './user.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(Users)
-    private userRepository: Repository<Users>
+    private userRepository: Repository<UserType>
   ) {}
 
-  // Проверка, существует ли email в базе данных
-  async isEmailTaken(email: string): Promise<boolean> {
-    const user = await this.userRepository.findOne({ where: { email } });
-    return !!user;
-  }
-
-  async findByEmail(email: string): Promise<Users | null> {
-    return this.userRepository.findOne({ where: { email } });
-  }
-
-  async create(createUserDto: CreateUserDto): Promise<Users> {
+  async create(createUserDto: CreateUserDto): Promise<UserType> {
     const { email, password } = createUserDto;
 
     // Проверяем, существует ли пользователь с таким email
@@ -36,8 +26,22 @@ export class UserService {
     const user = this.userRepository.create({
       email,
       password: hashedPassword,
+      registerAt: new Date().toISOString(),
     });
 
     return this.userRepository.save(user);
+  }
+
+  async isEmailTaken(email: string): Promise<boolean> {
+    const user = await this.userRepository.findOne({ where: { email } });
+    return !!user;
+  }
+
+  async findByEmail(email: string): Promise<UserType> {
+    return this.userRepository.findOne({ where: { email } });
+  }
+
+  async findById(userId: string): Promise<UserType> {
+    return this.userRepository.findOne({ where: { userId } });
   }
 }

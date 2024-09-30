@@ -15,6 +15,9 @@ export class Users implements UserType {
   @Column({ default: null })
   lastName: string;
 
+  @Column({ default: null })
+  registerAt: Date;
+
   @Column()
   password: string;
 

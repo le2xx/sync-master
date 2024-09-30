@@ -15,7 +15,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { UsersService } from '../services/users.service';
+import { UserService } from '../services/user.service';
 import { tap } from 'rxjs';
 
 @Component({
@@ -52,7 +52,7 @@ export class RegistrationFormComponent {
     confirmPassword: new FormControl<string>(null),
   });
 
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UserService) {}
 
   onToggleDisplayPass() {
     this.isDisplayPass.set(!this.isDisplayPass());

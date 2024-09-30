@@ -9,6 +9,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "strictNullChecks": false,
+    "useDefineForClassFields": false,
     "paths": {
       "@libs/*": ["libs/*"]
     }
