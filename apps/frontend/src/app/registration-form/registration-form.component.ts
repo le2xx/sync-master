@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
@@ -17,6 +22,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { UserService } from '../services/user.service';
 import { tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-registration-form',
@@ -52,7 +58,10 @@ export class RegistrationFormComponent {
     confirmPassword: new FormControl<string>(null),
   });
 
-  constructor(private usersService: UserService) {}
+  constructor(
+    private usersService: UserService,
+    private destroyRef: DestroyRef
+  ) {}
 
   onToggleDisplayPass() {
     this.isDisplayPass.set(!this.isDisplayPass());
@@ -63,7 +72,10 @@ export class RegistrationFormComponent {
     const { email, password } = this.formGroup.value;
     this.usersService
       .createUser({ email, password })
-      .pipe(tap((result) => console.log(result)))
+      .pipe(
+        tap((result) => console.log(result)),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe();
   }
 }

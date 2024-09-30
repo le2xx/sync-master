@@ -1,7 +1,9 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { LocalStorageKeys } from '@libs/models/src/lib/enums';
+import { environment } from '../../environments/environment';
+import { UserAccess } from '@libs/models/src/lib/types';
 
 export type UserLogin = {
   email: string;
@@ -12,22 +14,21 @@ export type UserLogin = {
   providedIn: 'root',
 })
 export class AuthService {
-  isLogin = signal<boolean>(false);
+  isLogin = computed(() => !!this.accessToken());
+  accessToken = computed(() => localStorage.getItem(this.tokenKey));
+  private apiUrl = environment.apiUrl;
 
   private tokenKey = LocalStorageKeys.access_token;
 
-  constructor(private httpClient: HttpClient) {
-    this.isLogin.set(!!localStorage.getItem(this.tokenKey));
-  }
+  constructor(private httpClient: HttpClient) {}
 
-  login(userLogin: UserLogin) {
+  login(userLogin: UserLogin): Observable<UserAccess> {
     return this.httpClient
-      .post<any>('http://localhost:3000/api/auth/login', userLogin)
+      .post<UserAccess>(`${this.apiUrl}/api/auth/login`, userLogin)
       .pipe(
         tap({
           next: (response) => {
-            localStorage.setItem(this.tokenKey, response.access_token);
-            this.isLogin.set(true);
+            localStorage.setItem(this.tokenKey, response.accessToken);
           },
         })
       );
@@ -35,6 +36,5 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem(this.tokenKey);
-    this.isLogin.set(false);
   }
 }

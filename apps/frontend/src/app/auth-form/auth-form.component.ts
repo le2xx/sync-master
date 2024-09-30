@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputGroupModule } from 'primeng/inputgroup';
@@ -13,7 +18,7 @@ import {
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { AuthService } from '../services/auth.service';
-import { tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-auth-form',
@@ -46,7 +51,10 @@ export class AuthFormComponent {
     ]),
   });
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private destroyRef: DestroyRef
+  ) {}
 
   onToggleDisplayPass() {
     this.isDisplayPass.set(!this.isDisplayPass());
@@ -56,11 +64,7 @@ export class AuthFormComponent {
     const { email, password } = this.formGroup.value;
     this.authService
       .login({ email, password })
-      .pipe(
-        tap((response) =>
-          localStorage.setItem('access_token', response.access_token)
-        )
-      )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
   }
 }

@@ -25,3 +25,12 @@ export type UserResponseDto = Omit<
   UserType,
   'password' | 'isActive' | 'isDeleted'
 >;
+
+export type UserRegistry = {
+  email: string;
+  password: string;
+};
+
+export type UserAccess = {
+  accessToken: string;
+};
