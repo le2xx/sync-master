@@ -12,9 +12,6 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { AuthFormComponent } from './auth-form/auth-form.component';
-import { ThemeService } from './services/theme.service';
-import { AuthService } from './services/auth.service';
-import { UsersService } from './services/users.service';
 import { InputSwitchModule } from 'primeng/inputswitch';
 
 @NgModule({
@@ -28,13 +25,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     AuthFormComponent,
     InputSwitchModule,
   ],
-  providers: [
-    provideAnimations(),
-    provideHttpClient(withInterceptorsFromDi()),
-    ThemeService,
-    AuthService,
-    UsersService,
-  ],
+  providers: [provideAnimations(), provideHttpClient(withInterceptorsFromDi())],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { LocalStorageKeys } from '@libs/models/src/lib/enums';
 
 export type UserLogin = {
   email: string;
@@ -13,7 +14,7 @@ export type UserLogin = {
 export class AuthService {
   isLogin = signal<boolean>(false);
 
-  private tokenKey = 'access_token';
+  private tokenKey = LocalStorageKeys.access_token;
 
   constructor(private httpClient: HttpClient) {
     this.isLogin.set(!!localStorage.getItem(this.tokenKey));

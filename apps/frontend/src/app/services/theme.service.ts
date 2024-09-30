@@ -1,12 +1,13 @@
 import { Inject, Injectable, signal } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { LocalStorageKeys } from '@libs/models/src/lib/enums';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ThemeService {
   isDark = signal<boolean>(false);
-  themeKey = 'theme';
+  themeKey = LocalStorageKeys.theme;
 
   constructor(@Inject(DOCUMENT) private document: Document) {
     this.setTheme(localStorage.getItem(this.themeKey) || 'light');
