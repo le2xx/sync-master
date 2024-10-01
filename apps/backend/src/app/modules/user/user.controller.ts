@@ -5,7 +5,7 @@ import {
   UserResponseDto,
   UserType,
 } from '@libs/models/src/lib/types';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 
 interface UserRequest extends Request {
   user: {
