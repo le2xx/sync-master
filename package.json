@@ -4,7 +4,9 @@
   "license": "MIT",
   "scripts": {
     "start-front": "nx serve frontend --port 4210",
-    "start-back": "nx serve backend"
+    "start-back": "nx serve backend",
+    "build-front": "nx build frontend --prod",
+    "build-docer-front": "docker build -t frontend -f apps/frontend/Dockerfile ."
   },
   "private": true,
   "devDependencies": {
