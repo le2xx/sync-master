@@ -6,7 +6,9 @@
     "start-front": "nx serve frontend --port 4210",
     "start-back": "nx serve backend",
     "build-front": "nx build frontend --prod",
-    "build-docer-front": "docker build -t frontend -f apps/frontend/Dockerfile ."
+    "build-back": "nx build backend --prod",
+    "build-docker-front": "docker build -t frontend -f apps/frontend/Dockerfile .",
+    "build-docker-back": "docker build -t backend -f apps/backend/Dockerfile ."
   },
   "private": true,
   "devDependencies": {

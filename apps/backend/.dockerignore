@@ -1,0 +1,14 @@
+node_modules
+dist
+package-lock.json
+apps
+!apps/backend
+
+.git
+.nx
+.angulaer
+.idea
+
+# System Files
+.DS_Store
+Thumbs.db
