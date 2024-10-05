@@ -1,0 +1,16 @@
+<div [formGroup]="formGroup" class="card flex flex-column gap-4">
+  <p-inputGroup>
+    <input type="text" placeholder="Role" pInputText formControlName="name" />
+  </p-inputGroup>
+
+  <p-inputGroup>
+    <button
+      pButton
+      pRipple
+      label="Создать роль"
+      class="p-inputgroup"
+      [disabled]="formGroup.invalid"
+      (click)="onCreate()"
+    ></button>
+  </p-inputGroup>
+</div>

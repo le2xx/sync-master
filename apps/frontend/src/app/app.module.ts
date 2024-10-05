@@ -13,6 +13,7 @@ import {
 } from '@angular/common/http';
 import { AuthFormComponent } from './auth-form/auth-form.component';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { CreateRoleFormComponent } from './create-role-form/create-role-form.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,6 +25,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     RegistrationFormComponent,
     AuthFormComponent,
     InputSwitchModule,
+    CreateRoleFormComponent,
   ],
   providers: [provideAnimations(), provideHttpClient(withInterceptorsFromDi())],
   bootstrap: [AppComponent],

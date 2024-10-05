@@ -11,6 +11,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Request, Response, NextFunction } from 'express';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { RolesModule } from './modules/roles/roles.module';
+import { OrganizationsModule } from './modules/organizations/organizations.module';
 
 @Injectable()
 export class CorsMiddleware implements NestMiddleware {
@@ -45,8 +47,10 @@ export class CorsMiddleware implements NestMiddleware {
       }),
       inject: [ConfigService],
     }),
-    UserModule,
     AuthModule,
+    RolesModule,
+    UserModule,
+    OrganizationsModule,
   ],
   providers: [],
 })

@@ -1,8 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { UserType } from '@libs/models/src/lib/types';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
+import { Organization } from '../organizations/organizations.entity';
+import { Role } from '../roles/roles.entity';
 
-@Entity()
-export class Users implements UserType {
+@Entity('users')
+export class Users {
   @PrimaryGeneratedColumn('uuid')
   userId: string;
 
@@ -26,4 +33,15 @@ export class Users implements UserType {
 
   @Column({ default: false })
   isDeleted: boolean;
+
+  @ManyToMany(() => Organization, (organization) => organization.users)
+  organizations: Organization[];
+
+  @ManyToMany(() => Role)
+  @JoinTable({
+    name: 'userOrganizationRoles',
+    joinColumn: { name: 'userId', referencedColumnName: 'userId' },
+    inverseJoinColumn: { name: 'roleId', referencedColumnName: 'roleId' },
+  })
+  roles: Role[];
 }
