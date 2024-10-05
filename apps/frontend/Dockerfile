@@ -20,7 +20,7 @@ RUN npm run build-front
 FROM nginx:alpine
 
 # Копируем собранное приложение в nginx
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist/apps/frontend/browser /usr/share/nginx/html
 
 # Экспонируем порт для сервера
 EXPOSE 80

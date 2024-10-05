@@ -16,11 +16,21 @@ COPY . .
 # Собираем Angular приложение
 RUN npm run build-back
 
-# Используем nginx для статической отдачи фронтенда
-FROM nginx:alpine
+# Шаг 2: Создаем образ для продакшн
+FROM node:18-alpine
 
-# Копируем собранное приложение в nginx
-COPY --from=build /app/dist /usr/share/nginx/html
+# Устанавливаем рабочую директорию
+WORKDIR /app
 
-# Экспонируем порт для сервера
-EXPOSE 80
+# Копируем собранные файлы из стадии сборки
+COPY --from=build /app/dist/apps/backend ./dist
+COPY --from=build /app/node_modules ./node_modules
+
+# Устанавливаем переменную окружения для продакшн
+ENV NODE_ENV=production
+
+# Экспонируем порт 3000
+EXPOSE 3000
+
+# Запускаем приложение
+CMD ["node", "dist/main"]
