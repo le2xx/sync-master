@@ -12,7 +12,7 @@ import { Request, Response, NextFunction } from 'express';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RolesModule } from './modules/roles/roles.module';
-import { OrganizationsModule } from './modules/organizations/organizations.module';
+import { CompanyModule } from './modules/company/company.module';
 
 @Injectable()
 export class CorsMiddleware implements NestMiddleware {
@@ -50,7 +50,7 @@ export class CorsMiddleware implements NestMiddleware {
     AuthModule,
     RolesModule,
     UserModule,
-    OrganizationsModule,
+    CompanyModule,
   ],
   providers: [],
 })

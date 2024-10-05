@@ -1,15 +1,8 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
-import { Organization } from '../organizations/organizations.entity';
-import { Role } from '../roles/roles.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { UserCompanyRole } from '../company/user-company-role.entity';
 
 @Entity('users')
-export class Users {
+export class User {
   @PrimaryGeneratedColumn('uuid')
   userId: string;
 
@@ -34,14 +27,6 @@ export class Users {
   @Column({ default: false })
   isDeleted: boolean;
 
-  @ManyToMany(() => Organization, (organization) => organization.users)
-  organizations: Organization[];
-
-  @ManyToMany(() => Role)
-  @JoinTable({
-    name: 'userOrganizationRoles',
-    joinColumn: { name: 'userId', referencedColumnName: 'userId' },
-    inverseJoinColumn: { name: 'roleId', referencedColumnName: 'roleId' },
-  })
-  roles: Role[];
+  @OneToMany(() => UserCompanyRole, (userOrgRole) => userOrgRole.user)
+  userCompanyRoles: UserCompanyRole[];
 }
