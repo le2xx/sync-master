@@ -1,13 +1,20 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
-import { UserAccess } from '@libs/models/src/lib/types';
+import { UserAccess, UserType } from '@libs/models/src/lib/types';
+import { convertKeysToCamelCase } from '../../utils';
+import { Pool } from 'pg';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
+    @Inject('PG_CONNECTION') private pool: Pool,
     private readonly jwtService: JwtService
   ) {}
 
@@ -22,7 +29,7 @@ export class AuthService {
   }
 
   private async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.userService.findByEmail(email);
+    const user = await this.findUserByEmail(email);
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const { password, ...result } = user;
@@ -36,5 +43,24 @@ export class AuthService {
     return {
       accessToken: this.jwtService.sign(payload),
     };
+  }
+
+  private async findUserByEmail(email: string): Promise<UserType> {
+    const client = await this.pool.connect();
+
+    try {
+      const result = await client.query(
+        `SELECT * FROM public.users WHERE email = $1 AND is_deleted = false`,
+        [email]
+      );
+
+      if (result.rows.length === 0) {
+        throw new NotFoundException(`User with email ${email} not found.`);
+      }
+
+      return convertKeysToCamelCase(result.rows[0]);
+    } finally {
+      client.release();
+    }
   }
 }

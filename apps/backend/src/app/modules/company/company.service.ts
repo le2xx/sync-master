@@ -1,53 +1,50 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Company } from './company.entity';
-import { Role } from '../roles/roles.entity';
-import { User } from '../user/user.entity';
-import { UserCompanyRole } from './user-company-role.entity';
+import { Inject, Injectable } from '@nestjs/common';
+import { CompanyType } from '@libs/models/src/lib/types';
+import { Pool } from 'pg';
+import { convertKeysToCamelCase } from '../../utils';
+import { UserRole } from '@libs/models/src/lib/enums';
 
 @Injectable()
 export class CompanyService {
-  constructor(
-    @InjectRepository(Company) private companyRepository: Repository<Company>,
-    @InjectRepository(User) private userRepository: Repository<User>,
-    @InjectRepository(Role) private roleRepository: Repository<Role>,
-    @InjectRepository(UserCompanyRole)
-    private userCompanyRoleRepository: Repository<UserCompanyRole>
-  ) {}
+  constructor(@Inject('PG_CONNECTION') private pool: Pool) {}
 
-  async create(name: string, currentUserId: string): Promise<Company> {
-    // Создание новой компании
-    const newCompany = this.companyRepository.create({ name });
-    const savedCompany = await this.companyRepository.save(newCompany);
+  async create(name: string, currentUserId: string): Promise<CompanyType> {
+    const client = await this.pool.connect();
 
-    // Получение текущего пользователя
-    const currentUser = await this.userRepository.findOneBy({
-      userId: currentUserId,
-    });
+    try {
+      await client.query('BEGIN');
 
-    if (!currentUser) {
-      throw new Error('Пользователь не найден');
+      // Создаём компанию и возвращаем её ID
+      const companyResult = await client.query(
+        `INSERT INTO public.companies (name)
+       VALUES ($1)
+       RETURNING *`, // Возвращаем всю информацию о компании
+        [name]
+      );
+
+      const newCompany = companyResult.rows[0]; // Сохраняем данные компании
+
+      // Получаем роль Owner
+      const roleResult = await client.query(
+        `SELECT role_id FROM public.roles WHERE role_id = ${UserRole.owner}`
+      );
+      const ownerRoleId = roleResult.rows[0].role_id;
+
+      // Назначаем текущему пользователю роль Owner в этой компании
+      await client.query(
+        `INSERT INTO public.user_company_roles (user_id, company_id, role_id)
+       VALUES ($1, $2, $3)`,
+        [currentUserId, newCompany.company_id, ownerRoleId]
+      );
+
+      await client.query('COMMIT');
+
+      return convertKeysToCamelCase(newCompany);
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
     }
-
-    // Получение роли
-    const role = await this.roleRepository.findOne({
-      where: { name: 'Owner' },
-    });
-
-    if (!role) {
-      throw new Error('Роль не найдена');
-    }
-
-    // Создание связи между пользователем и компанией с заданной ролью
-    const userOrganizationRole = this.userCompanyRoleRepository.create({
-      user: currentUser,
-      company: savedCompany,
-      role: role,
-    });
-
-    await this.userCompanyRoleRepository.save(userOrganizationRole);
-
-    return savedCompany;
   }
 }

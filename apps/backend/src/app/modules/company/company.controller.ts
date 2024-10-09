@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { Company } from './company.entity';
 import { CompanyService } from './company.service';
 import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
+import { CompanyType } from '@libs/models/src/lib/types';
 
 // TODO повторяется, нужно вынести в общие
 interface UserRequest extends Request {
@@ -20,7 +20,7 @@ export class CompanyController {
   async createCompany(
     @Body('name') name: string,
     @Req() req: UserRequest
-  ): Promise<Company> {
+  ): Promise<CompanyType> {
     const userId = req.user.userId;
     try {
       return this.companyService.create(name, userId);
