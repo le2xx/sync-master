@@ -22,9 +22,13 @@ FROM node:18-alpine
 # Устанавливаем рабочую директорию
 WORKDIR /app
 
+# Копируем только production зависимости из первого этапа
+COPY --from=build /app/package*.json ./
+RUN npm install --only=production
+
 # Копируем собранные файлы из стадии сборки
 COPY --from=build /app/dist/apps/backend ./dist
-COPY --from=build /app/node_modules ./node_modules
+#COPY --from=build /app/node_modules ./node_modules
 
 # Устанавливаем переменную окружения для продакшн
 ENV NODE_ENV=production
