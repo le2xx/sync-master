@@ -31,4 +31,13 @@ export class ProjectService {
       { headers }
     );
   }
+
+  getMyProjects(): Observable<Project[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authService.accessToken()}`,
+    });
+    return this.httpClient.get<Project[]>(`${this.apiUrl}/api/project/my`, {
+      headers,
+    });
+  }
 }

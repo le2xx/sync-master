@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CompanyType } from '@libs/models/src/lib/types';
+import { Company } from '@libs/models/src/lib/types';
 import { Pool } from 'pg';
 import { convertKeysToCamelCase } from '../../utils';
 import { UserRole } from '@libs/models/src/lib/enums';
@@ -8,7 +8,7 @@ import { UserRole } from '@libs/models/src/lib/enums';
 export class CompanyService {
   constructor(@Inject('PG_CONNECTION') private pool: Pool) {}
 
-  async create(name: string, currentUserId: string): Promise<CompanyType> {
+  async create(name: string, currentUserId: string): Promise<Company> {
     const client = await this.pool.connect();
 
     try {
@@ -43,6 +43,24 @@ export class CompanyService {
     } catch (error) {
       await client.query('ROLLBACK');
       throw error;
+    } finally {
+      client.release();
+    }
+  }
+
+  async getMyCompanies(userId: string): Promise<Company[]> {
+    const client = await this.pool.connect();
+
+    try {
+      const result = await client.query(
+        `SELECT c.*
+         FROM public.companies c
+         JOIN public.user_company_roles ucr ON ucr.company_id = c.company_id -- Измените на правильный столбец
+         WHERE ucr.user_id = $1`,
+        [userId]
+      );
+
+      return result.rows; // Здесь возвращаем массив компаний
     } finally {
       client.release();
     }

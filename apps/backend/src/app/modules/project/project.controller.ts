@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import {
@@ -19,5 +19,12 @@ export class ProjectController {
   ): Promise<Project> {
     const userId = req.user.userId;
     return await this.projectService.create(createProject, userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('my')
+  async getMyProjects(@Req() req: UserRequest): Promise<Project[]> {
+    const userId = req.user.userId;
+    return this.projectService.getMyProjects(userId);
   }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CreateCompanyDto } from '@libs/models/src/lib/types';
+import { Company, CreateCompanyDto } from '@libs/models/src/lib/types';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -26,5 +26,15 @@ export class CompanyService {
       { name },
       { headers }
     );
+  }
+
+  getMyCompanies(): Observable<Company[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authService.accessToken()}`,
+    });
+
+    return this.httpClient.get<Company[]>(`${this.apiUrl}/api/company/my`, {
+      headers,
+    });
   }
 }

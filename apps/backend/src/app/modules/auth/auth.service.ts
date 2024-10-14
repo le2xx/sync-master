@@ -7,7 +7,7 @@ import {
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
-import { UserAccess, UserType } from '@libs/models/src/lib/types';
+import { UserAccess, User } from '@libs/models/src/lib/types';
 import { convertKeysToCamelCase } from '../../utils';
 import { Pool } from 'pg';
 
@@ -45,7 +45,7 @@ export class AuthService {
     };
   }
 
-  private async findUserByEmail(email: string): Promise<UserType> {
+  private async findUserByEmail(email: string): Promise<User> {
     const client = await this.pool.connect();
 
     try {

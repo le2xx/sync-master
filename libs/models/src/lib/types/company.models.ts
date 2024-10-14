@@ -1,4 +1,4 @@
-export type CompanyType = {
+export type Company = {
   companyId: string;
   name: string;
 };

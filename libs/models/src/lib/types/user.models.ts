@@ -1,6 +1,4 @@
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
-
-export type UserType = {
+export type User = {
   userId: string;
   email: string;
   firstName: string;
@@ -11,20 +9,12 @@ export type UserType = {
   isDeleted: boolean;
 };
 
-export class CreateUserDto implements Pick<UserType, 'email' | 'password'> {
-  @IsNotEmpty({ message: 'Email is required' })
-  @IsEmail({}, { message: 'Invalid email address' })
+export class CreateUserDto implements Pick<User, 'email' | 'password'> {
   email: string;
-
-  @IsNotEmpty({ message: 'Password is required' })
-  @MinLength(8, { message: 'Password must be at least 8 characters long' })
   password: string;
 }
 
-export type UserResponseDto = Omit<
-  UserType,
-  'password' | 'isActive' | 'isDeleted'
->;
+export type UserResponseDto = Omit<User, 'password' | 'isActive' | 'isDeleted'>;
 
 export type UserRegistry = {
   email: string;

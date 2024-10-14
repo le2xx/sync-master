@@ -53,4 +53,22 @@ export class ProjectService {
       client.release();
     }
   }
+
+  async getMyProjects(userId: string): Promise<Project[]> {
+    const client = await this.pool.connect();
+
+    try {
+      const result = await client.query(
+        `SELECT p.*
+         FROM public.projects p
+         JOIN public.user_company_roles ucr ON ucr.company_id = p.company_id
+         WHERE ucr.user_id = $1`,
+        [userId]
+      );
+
+      return result.rows; // Возвращаем массив проектов
+    } finally {
+      client.release();
+    }
+  }
 }
