@@ -34,3 +34,10 @@ export type UserRegistry = {
 export type UserAccess = {
   accessToken: string;
 };
+
+export interface UserRequest extends Request {
+  user: {
+    userId: string;
+    email: string;
+  };
+}

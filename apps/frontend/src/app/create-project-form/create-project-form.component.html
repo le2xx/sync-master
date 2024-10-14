@@ -1,0 +1,39 @@
+<div [formGroup]="formGroup" class="card flex flex-column gap-4">
+  <p-inputGroup>
+    <input
+      type="text"
+      placeholder="Project name"
+      pInputText
+      formControlName="name"
+    />
+  </p-inputGroup>
+
+  <p-inputGroup>
+    <input
+      type="text"
+      placeholder="Company Id"
+      pInputText
+      formControlName="companyId"
+    />
+  </p-inputGroup>
+
+  <p-inputGroup>
+    <input
+      type="text"
+      placeholder="Description"
+      pInputText
+      formControlName="description"
+    />
+  </p-inputGroup>
+
+  <p-inputGroup>
+    <button
+      pButton
+      pRipple
+      label="Создать проект"
+      class="p-inputgroup"
+      [disabled]="formGroup.invalid"
+      (click)="onCreate()"
+    ></button>
+  </p-inputGroup>
+</div>

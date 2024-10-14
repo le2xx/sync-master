@@ -22,6 +22,17 @@ CREATE TABLE public.companies (
   is_deleted BOOL DEFAULT false
 );
 
+CREATE TABLE public.projects (
+  project_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(255) DEFAULT NULL,
+  description VARCHAR(255) DEFAULT NULL,
+  company_id UUID NOT NULL,
+  CONSTRAINT fk_company
+    FOREIGN KEY (company_id)
+    REFERENCES public.companies (company_id)
+    ON DELETE CASCADE
+);
+
 CREATE TABLE public.roles (
   role_id SERIAL PRIMARY KEY,
   name VARCHAR(50) DEFAULT NULL,
