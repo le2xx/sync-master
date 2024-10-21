@@ -16,6 +16,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { CreateRoleFormComponent } from './create-role-form/create-role-form.component';
 import { CreateCompanyFormComponent } from './create-company-form/create-company-form.component';
 import { CreateProjectFormComponent } from './create-project-form/create-project-form.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,6 +31,7 @@ import { CreateProjectFormComponent } from './create-project-form/create-project
     CreateRoleFormComponent,
     CreateCompanyFormComponent,
     CreateProjectFormComponent,
+    ProfileComponent,
   ],
   providers: [provideAnimations(), provideHttpClient(withInterceptorsFromDi())],
   bootstrap: [AppComponent],

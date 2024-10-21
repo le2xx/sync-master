@@ -14,6 +14,7 @@ import { RolesModule } from './modules/roles/roles.module';
 import { CompanyModule } from './modules/company/company.module';
 import { DatabaseModule } from './database.module';
 import { ProjectModule } from './modules/project/project.module';
+import { StorageModule } from './modules/storage/storage.module';
 
 @Injectable()
 export class CorsMiddleware implements NestMiddleware {
@@ -40,6 +41,7 @@ export class CorsMiddleware implements NestMiddleware {
     CompanyModule,
     DatabaseModule,
     ProjectModule,
+    StorageModule,
   ],
 })
 export class AppModule implements NestModule {
