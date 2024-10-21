@@ -5,7 +5,6 @@ services:
     image: nginx:alpine
     ports:
       - "80:80"
-      - "4210:4210"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ${STORAGE_PATH}:/usr/share/nginx/html/storage
