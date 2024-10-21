@@ -8,13 +8,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class StorageService {
-  private publicDirName = this.configService.get<string>('PUBLIC_STORAGE_PATH');
+  private publicStoragePath = this.configService.get<string>(
+    'PUBLIC_STORAGE_PATH'
+  );
+  private storagePath = this.configService.get<string>('STORAGE_PATH');
 
   constructor(private readonly configService: ConfigService) {}
 
   async uploadPublicFile(file: any): Promise<any> {
     const generatedUUID = uuidv4();
-    const targetDir = join(this.publicDirName, generatedUUID);
+    const targetDir = join(...[this.storagePath, generatedUUID]);
     const fileExtension = extname(file.originalname);
     const newFileName = `original${fileExtension}`;
     const filePath = join(targetDir, newFileName);
@@ -22,7 +25,10 @@ export class StorageService {
 
     mkdirSync(targetDir, { recursive: true });
     writeFileSync(filePath, file.buffer);
-    sizesResp.set('original', filePath);
+    sizesResp.set(
+      'original',
+      `${this.publicStoragePath}${generatedUUID}/${newFileName}`
+    );
 
     for (const size of imageSizes) {
       const [key, value] = size;
@@ -31,7 +37,10 @@ export class StorageService {
         .resize(value, value)
         .toFile(join(targetDir, `${key}${fileExtension}`))
         .then(() =>
-          sizesResp.set(`${key}`, `${targetDir}/${key}${fileExtension}`)
+          sizesResp.set(
+            `${key}`,
+            `${this.publicStoragePath}${generatedUUID}/${key}${fileExtension}`
+          )
         );
     }
     console.log('------------', sizesResp);
