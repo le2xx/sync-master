@@ -5,8 +5,10 @@ services:
     image: nginx:alpine
     ports:
       - "80:80"
+      - "4210:4210"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+      - ${STORAGE_PATH}:/usr/share/nginx/html/storage
     depends_on:
       - frontend
       - backend
@@ -21,14 +23,14 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: production
-      JWT_SECRET: uA7A/NRITwAFd5KEFFAnQoJ0DjMQKDSwKyOQYALVl7pOBm8Ae1qxOO7RCCG31qt3Y+gCCNuLaoV/kyhj2WrK5ay2bjJt5LHHGgQoq1Eys2p9N9w51gH/+xKLNcrbxjRfgE97g/eMKigEtMPalwtR12xn7NemIHjvbOIJTu4I4UPd2Lwr07jQ/w1IcvrB1C/Q8xFUNfBQGZDarKsA3C+r6BBhMZAHCn/VtXCDK7lknAt6eZLs3FbFk00IQGrWHcEl+o5iM4gHom3rCrK7NFALwY4kTyJUM+V5zs7mqZ09xchPOmjgwkInmmKXJJYXZJNWQRHvOUJJ7gq/FdoLEGkLLA==
-      JWT_EXPIRES: 15m
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: sync_master
-      DATABASE_URL: postgres://postgres:password@postgres:5432/sync_master
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES: ${JWT_EXPIRES}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
     depends_on:
       - postgres
     networks:
